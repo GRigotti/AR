@@ -2,71 +2,128 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AR Hiro Estável</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>AR Modelos</title>
 
-  <!-- A-Frame -->
-  <script src="https://aframe.io/releases/1.3.0/aframe.min.js"></script>
-
-  <!-- AR.js -->
-  <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
+  <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
 
   <style>
     html, body {
       margin: 0;
       padding: 0;
-      overflow: hidden;
-      width: 100%;
-      height: 100%;
+      width: 100vw;
+      height: 100dvh;
+      background-color: #222222;
+      overflow: hidden; 
+    }
+
+    model-viewer {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100dvh;
+      background-color: transparent;
+      display: block;
+    }
+
+    /* O menu agora está preparado para os seus 4 botões */
+    .menu-modelos {
+      position: absolute;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 8px; /* Espaço um pouco menor para caber os 4 botões em telas pequenas */
+      gap: 8px; 
+      z-index: 9999;
+      flex-wrap: wrap; /* Se a tela for muito fina, ele joga os botões para a linha de baixo automaticamente */
+      flex-wrap: wrap; 
+      justify-content: center;
+      width: 90%;
+    }
+
+    .btn-trocar {
+      background-color: rgba(255, 255, 255, 0.8);
+      color: #333;
+      border: 2px solid #ffffff;
+      border-radius: 8px;
+      padding: 8px 12px;
+      font-size: 14px;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0px 2px 5px rgba(0,0,0,0.3);
+      backdrop-filter: blur(4px);
+    }
+
+    .btn-trocar:active {
+      background-color: #ffffff;
+    }
+
+    .botao-ar-customizado {
+      background-color: #ffffff;
+      color: #333333;
+      border: none;
+      border-radius: 8px;
+      position: absolute !important;
+      bottom: 40px !important;
+      left: 50% !important;
+      transform: translateX(-50%) !important;
+      margin: 0 !important;
+      padding: 12px 24px;
+      font-size: 16px;
+      font-weight: bold;
+      box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+      cursor: pointer;
+      white-space: nowrap;
+      z-index: 9999 !important;
     }
   </style>
 </head>
 
 <body>
 
-  <a-scene 
-    embedded
-    vr-mode-ui="enabled: false"
-    renderer="logarithmicDepthBuffer: true; precision: medium;"
-    arjs="sourceType: webcam; videoTexture: true; debugUIEnabled: false;">
+<div class="menu-modelos">
+  <button class="btn-trocar" onclick="mudarModelo('Teste.glb')">Padrão</button>
+  <button class="btn-trocar" onclick="mudarModelo('Testa_Lado.glb')">De Lado</button>
+  <button class="btn-trocar" onclick="mudarModelo('Testa_pe.glb')">Em Pé</button>
+  <button class="btn-trocar" onclick="mudarModelo('Testa_virada.glb')">Virada</button>
+  <button class="btn-trocar" onclick="mudarModelo('Teste_Lado.glb')">De Lado</button>
+  <button class="btn-trocar" onclick="mudarModelo('Teste_pe.glb')">Em Pé</button>
+  <button class="btn-trocar" onclick="mudarModelo('Teste_virada.glb')">Virada</button>
+</div>
 
-    <!-- Assets -->
-    <a-assets>
-      <a-asset-item id="meu-modelo" src="Teste.glb"></a-asset-item>
-    </a-assets>
+<model-viewer
+  id="meuViewer"
+  src="Teste.glb"
+  ios-src="Teste.usdz"
+  ar
+  ar-modes="webxr scene-viewer quick-look"
+  camera-controls
+  auto-rotate>
 
-    <!-- Marcador -->
-    <a-marker 
-      type="pattern" 
-      url="icone.patt"
-      smooth="true"
-      smoothCount="10"
-      smoothTolerance="0.01"
-      smoothThreshold="5">
+  <button slot="ar-button" class="botao-ar-customizado">
+    📸 Ver no meu espaço
+  </button>
 
-      <!-- Modelo 3D -->
-      <a-entity 
-        gltf-model="#meu-modelo"
-        scale="0.5 0.5 0.5"
-        position="0 0 0"
-        rotation="0 0 0">
-      </a-entity>
+</model-viewer>
 
-    </a-marker>
-
-    <!-- Câmera -->
-    <a-entity camera></a-entity>
-  </a-scene>
-
-  <!-- Ajuste automático de tela -->
-  <script>
-    window.addEventListener('resize', function () {
-      const scene = document.querySelector('a-scene');
-      if (scene && scene.renderer) {
-        scene.renderer.setSize(window.innerWidth, window.innerHeight);
-      }
-    });
-  </script>
+<script>
+  function mudarModelo(nomeDoArquivo) {
+  function mudarModelo(nomeDoArquivoGLB) {
+    const visualizador = document.getElementById('meuViewer');
+    visualizador.src = nomeDoArquivo;
+    
+    // 1. Altera o modelo para Android/PC (.glb)
+    visualizador.src = nomeDoArquivoGLB;
+    
+    // 2. Substitui o texto ".glb" por ".usdz" automaticamente
+    const nomeDoArquivoUSDZ = nomeDoArquivoGLB.replace('.glb', '.usdz');
+    
+    // 3. Altera o modelo para iPhone (iOS) com a nova extensão
+    visualizador.setAttribute('ios-src', nomeDoArquivoUSDZ);
+  }
+</script>
 
 </body>
 </html>
