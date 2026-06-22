@@ -8,75 +8,25 @@
   <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
 
   <style>
-    html, body {
-      margin: 0;
-      padding: 0;
-      width: 100vw;
-      height: 100dvh;
-      background-color: #222222;
-      overflow: hidden; 
-    }
+    html, body { margin: 0; padding: 0; width: 100vw; height: 100dvh; background-color: #222222; overflow: hidden; }
+    model-viewer { position: absolute; top: 0; left: 0; width: 100vw; height: 100dvh; background-color: transparent; display: block; }
 
-    model-viewer {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100dvh;
-      background-color: transparent;
-      display: block;
-    }
-
-    /* O menu agora está preparado para os seus 4 botões */
     .menu-modelos {
-      position: absolute;
-      top: 20px;
-      left: 50%;
-      transform: translateX(-50%);
-      display: flex;
-      gap: 8px; /* Espaço um pouco menor para caber os 4 botões em telas pequenas */
-      gap: 8px; 
-      z-index: 9999;
-      flex-wrap: wrap; /* Se a tela for muito fina, ele joga os botões para a linha de baixo automaticamente */
-      flex-wrap: wrap; 
-      justify-content: center;
-      width: 90%;
+      position: absolute; top: 20px; left: 50%; transform: translateX(-50%);
+      display: flex; gap: 8px; z-index: 9999; flex-wrap: wrap; justify-content: center; width: 90%;
     }
 
     .btn-trocar {
-      background-color: rgba(255, 255, 255, 0.8);
-      color: #333;
-      border: 2px solid #ffffff;
-      border-radius: 8px;
-      padding: 8px 12px;
-      font-size: 14px;
-      font-weight: bold;
-      cursor: pointer;
-      box-shadow: 0px 2px 5px rgba(0,0,0,0.3);
-      backdrop-filter: blur(4px);
-    }
-
-    .btn-trocar:active {
-      background-color: #ffffff;
+      background-color: rgba(255, 255, 255, 0.8); color: #333; border: 2px solid #ffffff;
+      border-radius: 8px; padding: 8px 12px; font-size: 14px; font-weight: bold; cursor: pointer;
+      box-shadow: 0px 2px 5px rgba(0,0,0,0.3); backdrop-filter: blur(4px);
     }
 
     .botao-ar-customizado {
-      background-color: #ffffff;
-      color: #333333;
-      border: none;
-      border-radius: 8px;
-      position: absolute !important;
-      bottom: 40px !important;
-      left: 50% !important;
-      transform: translateX(-50%) !important;
-      margin: 0 !important;
-      padding: 12px 24px;
-      font-size: 16px;
-      font-weight: bold;
-      box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
-      cursor: pointer;
-      white-space: nowrap;
-      z-index: 9999 !important;
+      background-color: #ffffff; color: #333333; border: none; border-radius: 8px;
+      position: absolute !important; bottom: 40px !important; left: 50% !important;
+      transform: translateX(-50%) !important; padding: 12px 24px; font-size: 16px;
+      font-weight: bold; box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3); z-index: 9999 !important;
     }
   </style>
 </head>
@@ -85,9 +35,9 @@
 
 <div class="menu-modelos">
   <button class="btn-trocar" onclick="mudarModelo('Teste.glb')">Padrão</button>
-  <button class="btn-trocar" onclick="mudarModelo('Testa_Lado.glb')">De Lado</button>
-  <button class="btn-trocar" onclick="mudarModelo('Testa_pe.glb')">Em Pé</button>
-  <button class="btn-trocar" onclick="mudarModelo('Testa_virada.glb')">Virada</button>
+  <button class="btn-trocar" onclick="mudarModelo('Teste_Lado.glb')">De Lado</button>
+  <button class="btn-trocar" onclick="mudarModelo('Teste_pe.glb')">Em Pé</button>
+  <button class="btn-trocar" onclick="mudarModelo('Teste_virada.glb')">Virada</button>
 </div>
 
 <model-viewer
@@ -102,22 +52,17 @@
   <button slot="ar-button" class="botao-ar-customizado">
     📸 Ver no meu espaço
   </button>
-
 </model-viewer>
 
 <script>
-  function mudarModelo(nomeDoArquivo) {
   function mudarModelo(nomeDoArquivoGLB) {
     const visualizador = document.getElementById('meuViewer');
-    visualizador.src = nomeDoArquivo;
     
-    // 1. Altera o modelo para Android/PC (.glb)
+    // Altera o modelo Android/PC
     visualizador.src = nomeDoArquivoGLB;
     
-    // 2. Substitui o texto ".glb" por ".usdz" automaticamente
+    // Substitui .glb por .usdz para iPhone
     const nomeDoArquivoUSDZ = nomeDoArquivoGLB.replace('.glb', '.usdz');
-    
-    // 3. Altera o modelo para iPhone (iOS) com a nova extensão
     visualizador.setAttribute('ios-src', nomeDoArquivoUSDZ);
   }
 </script>
