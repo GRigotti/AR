@@ -58,12 +58,19 @@
   function mudarModelo(nomeDoArquivoGLB) {
     const visualizador = document.getElementById('meuViewer');
     
-    // Altera o modelo Android/PC
-    visualizador.src = nomeDoArquivoGLB;
-    
-    // Substitui .glb por .usdz para iPhone
+    // 1. Cria o nome do arquivo .usdz
     const nomeDoArquivoUSDZ = nomeDoArquivoGLB.replace('.glb', '.usdz');
+    
+    // 2. Remove o modelo atual e forçamos a atualização dos atributos
+    visualizador.src = nomeDoArquivoGLB;
     visualizador.setAttribute('ios-src', nomeDoArquivoUSDZ);
+
+    // 3. O "Pulo do Gato": Forçamos o reload do componente
+    // Isso garante que, mesmo com o AR aberto ou prestes a abrir, 
+    // ele carregue a nova fonte de dados.
+    visualizador.dismissPoster(); 
+    
+    console.log("Modelo trocado para: " + nomeDoArquivoGLB);
   }
 </script>
 
